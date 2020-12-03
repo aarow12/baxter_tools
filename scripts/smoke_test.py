@@ -50,7 +50,7 @@ def run_test(tname, fname, proceed):
     try:
         cur_test = getattr(smoketests, tname)(tname)
     except AttributeError:
-        print("Exiting: %s is not a valid smoke test." % tname)
+        print(("Exiting: %s is not a valid smoke test." % tname))
         sys.exit(1)
     except:
         print("Exiting: failed during intialization.")
@@ -61,7 +61,7 @@ def run_test(tname, fname, proceed):
     cur_test.finish_test(fname)
     if (not proceed and cur_test.result[0] == False or
     'KeyboardInterrupt' in cur_test.result[1]):
-        print("Exiting: Failed Test %s" % tname)
+        print(("Exiting: Failed Test %s" % tname))
         sys.exit(1)
 
 
@@ -89,12 +89,12 @@ def get_version():
     try:
         version = rospy.get_param('/rethink/software_version').rsplit('.', 1)[0]
     except socket.error:
-        print("Exiting: Could not communicate with ROS Master to determine " +
-              "Software version")
+        print(("Exiting: Could not communicate with ROS Master to determine " +
+              "Software version"))
         sys.exit(1)
     except:
-        print("Exiting: Could not determine SW version from param " +
-            "'/rethink/software_version'")
+        print(("Exiting: Could not determine SW version from param " +
+            "'/rethink/software_version'"))
         sys.exit(1)
     return version
 
@@ -132,13 +132,13 @@ def main():
         }
 
     test_dict['version'] = get_version()
-    if not test_dict['version'] in test_dict['valid_tests'].keys():
-        print("Exiting: No tests specified for your software version: %s" %
-            (test_dict['version']))
+    if not test_dict['version'] in list(test_dict['valid_tests'].keys()):
+        print(("Exiting: No tests specified for your software version: %s" %
+            (test_dict['version'])))
         return 1
 
     try:
-        raw_input("Press <Enter> to Begin Smoke Test\n")
+        input("Press <Enter> to Begin Smoke Test\n")
     except Exception:
         print("\nExiting.")
         return 1
@@ -150,7 +150,7 @@ def main():
                  cur_time.tm_year, test_dict['version'],)
                 )
     if args.test == None:
-        print 'Performing All Tests'
+        print('Performing All Tests')
         ros_init()
         for t in test_dict['valid_tests'][test_dict['version']]:
             run_test(t, filename, args.proceed)
@@ -158,8 +158,8 @@ def main():
         ros_init()
         run_test(args.test, filename, args.proceed)
     else:
-        print("Exiting: Invalid test provided: %s for %s version software" %
-              (args.test, test_dict['version']))
+        print(("Exiting: Invalid test provided: %s for %s version software" %
+              (args.test, test_dict['version'])))
         parser.print_help()
 
     return 0

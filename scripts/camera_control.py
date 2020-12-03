@@ -62,7 +62,7 @@ def list_cameras(*_args, **_kwds):
         except socket.error:
             raise ROSTopicIOException("Cannot communicate with master.")
         for cam in resp.cameras:
-            print("%s%s" % (cam, ("  -  (open)" if open_cams[cam] else "")))
+            print(("%s%s" % (cam, ("  -  (open)" if open_cams[cam] else ""))))
     else:
         print ('No cameras found')
 
@@ -134,12 +134,12 @@ def main():
         camera = args.open
         lres = args.resolution.split('x')
         if len(lres) != 2:
-            print fmt_res % tuple(str_res)
+            print(fmt_res % tuple(str_res))
             parser.error("Invalid resolution format: %s. Use (X)x(Y).")
         res = (int(lres[0]), int(lres[1]))
         if not any((res[0] == r[0] and res[1] == r[1])
                    for r in CameraController.MODES):
-            print fmt_res % tuple(str_res)
+            print(fmt_res % tuple(str_res))
             parser.error("Invalid resolution provided.")
     elif args.close:
         action = close_camera

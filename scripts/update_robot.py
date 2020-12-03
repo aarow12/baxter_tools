@@ -138,7 +138,7 @@ def run_update(updater, uuid):
         if msg.status == UpdateStatus.STS_IDLE:
             nl.done = True
         elif msg.status == UpdateStatus.STS_INVALID:
-            print ("Invalid update uuid, '%s'." % (uuid,))
+            print(("Invalid update uuid, '%s'." % (uuid,)))
             nl.done = True
         elif msg.status == UpdateStatus.STS_BUSY:
             print ("Update already in progress (may be shutting down).")
@@ -147,14 +147,14 @@ def run_update(updater, uuid):
             print ("Update cancelled.")
             nl.done = True
         elif msg.status == UpdateStatus.STS_ERR:
-            print ("Update failed: %s." % (msg.long_description,))
+            print(("Update failed: %s." % (msg.long_description,)))
             nl.done = True
             nl.rc = 1
         elif msg.status == UpdateStatus.STS_LOAD_KEXEC:
             print ("Robot will now reboot to finish updating...")
             nl.rc = 0
         else:
-            print ("Updater:  %s" % (msg.long_description))
+            print(("Updater:  %s" % (msg.long_description)))
 
     def on_shutdown():
         updater.stop_update()
@@ -164,9 +164,9 @@ def run_update(updater, uuid):
 
     try:
         updater.command_update(uuid)
-    except OSError, e:
+    except OSError as e:
         if e.errno == errno.EINVAL:
-            print e.strerror
+            print(e.strerror)
             return 1
         raise
 
@@ -176,9 +176,9 @@ def run_update(updater, uuid):
             timeout=5 * 60,
             timeout_msg="Timeout waiting for update to succeed"
         )
-    except Exception, e:
+    except Exception as e:
         if not (hasattr(e, 'errno') and e.errno == errno.ESHUTDOWN):
-            print e.strerror
+            print(e.strerror)
         nl.rc = 1
 
     return nl.rc
@@ -260,19 +260,19 @@ def main():
         if not len(updates):
             print ("No available updates")
         else:
-            print ("%-30s%s" % ("Version", "UUID"))
+            print(("%-30s%s" % ("Version", "UUID")))
             for update in updates:
-                print("%-30s%s" % (update[0], update[1]))
+                print(("%-30s%s" % (update[0], update[1])))
         return 0
     elif cmd == 'update':
         if uuid == '':
-            print "Error:  no update uuid specified"
+            print("Error:  no update uuid specified")
             return 1
         msg = ("NOTE: Please plug in any Rethink Electric Parallel Grippers\n"
                "      into the robot now, so that the Gripper Firmware\n"
                "      can be automatically upgraded with the robot.\n")
         print (msg)
-        raw_input("Press <Enter> to Continue...")
+        input("Press <Enter> to Continue...")
         if rospy.is_shutdown():
             return 0
         return run_update(updater, uuid)
